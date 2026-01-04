@@ -1,0 +1,5 @@
+${PODS_ROOT}/Target Support Files/Pods-PokerUIKit/Pods-PokerUIKit-frameworks.sh
+${BUILT_PRODUCTS_DIR}/AdvancedPageControl/AdvancedPageControl.framework
+${BUILT_PRODUCTS_DIR}/EasyPeasy/EasyPeasy.framework
+${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework
+${BUILT_PRODUCTS_DIR}/ToosieSlide/ToosieSlide.framework

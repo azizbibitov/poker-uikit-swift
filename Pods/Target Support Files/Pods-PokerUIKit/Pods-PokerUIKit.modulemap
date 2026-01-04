@@ -1,0 +1,6 @@
+framework module Pods_PokerUIKit {
+  umbrella header "Pods-PokerUIKit-umbrella.h"
+
+  export *
+  module * { export * }
+}

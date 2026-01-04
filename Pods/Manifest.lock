@@ -1,0 +1,48 @@
+PODS:
+  - AdvancedPageControl (0.9.0)
+  - EasyPeasy (1.10.0)
+  - Kingfisher (7.6.2)
+  - ToosieSlide (1.1.1)
+
+DEPENDENCIES:
+  - "AdvancedPageControl (from `git@github.com:mohn93/AdvancedPageControl.git`, tag `0.9.0`)"
+  - "EasyPeasy (from `git@github.com:nakiostudio/EasyPeasy.git`)"
+  - "Kingfisher (from `git@github.com:onevcat/Kingfisher.git`, tag `7.6.2`)"
+  - "ToosieSlide (from `git@github.com:TheInkedEngineer/ToosieSlide.git`, tag `1.1.1`)"
+
+EXTERNAL SOURCES:
+  AdvancedPageControl:
+    :git: "git@github.com:mohn93/AdvancedPageControl.git"
+    :tag: 0.9.0
+  EasyPeasy:
+    :git: "git@github.com:nakiostudio/EasyPeasy.git"
+  Kingfisher:
+    :git: "git@github.com:onevcat/Kingfisher.git"
+    :tag: 7.6.2
+  ToosieSlide:
+    :git: "git@github.com:TheInkedEngineer/ToosieSlide.git"
+    :tag: 1.1.1
+
+CHECKOUT OPTIONS:
+  AdvancedPageControl:
+    :git: "git@github.com:mohn93/AdvancedPageControl.git"
+    :tag: 0.9.0
+  EasyPeasy:
+    :commit: b0028f63d47bcb32e37d8abb9cc5d5a781742a4e
+    :git: "git@github.com:nakiostudio/EasyPeasy.git"
+  Kingfisher:
+    :git: "git@github.com:onevcat/Kingfisher.git"
+    :tag: 7.6.2
+  ToosieSlide:
+    :git: "git@github.com:TheInkedEngineer/ToosieSlide.git"
+    :tag: 1.1.1
+
+SPEC CHECKSUMS:
+  AdvancedPageControl: 39e3b32b00b2d324c534f8e17cc6c5be9abe84b7
+  EasyPeasy: b9b1bae024d21a7dfa9bad26d6826d88348cc6f1
+  Kingfisher: 6c5449c6450c5239166510ba04afe374a98afc4f
+  ToosieSlide: b410e89e0e1c00aecddeecebd1b4a8ed66385cac
+
+PODFILE CHECKSUM: b265c11b7453de93c0f9009993e241f564ea45bc
+
+COCOAPODS: 1.16.2
