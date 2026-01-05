@@ -39,3 +39,23 @@ var combinations: [CombinationModel] = [
     CombinationModel(title: "Royal Flush", image: "royal_flush", description: "It consists of 5 high cards of the same suit, ending with an ace, and always guarantees the participant a victory."),
     CombinationModel(description: "That was the last pierce of information, seems you are ready to test your knowledge!"),
 ]
+
+enum PokerCombination: String, CaseIterable {
+    case pair
+    case twoPairs = "two_pairs"
+    case threeKind = "three_kind"
+    case straight
+    case flush
+    case fullHouse = "full_house"
+    case fourKind = "four_kind"
+    case straightFlush = "straight_flush"
+    case royalFlush = "royal_flush"
+}
+
+struct QuizModel {
+    let question: PokerCombination
+    let answers: [PokerCombination]
+    let correctAnswer: PokerCombination
+}
+
+

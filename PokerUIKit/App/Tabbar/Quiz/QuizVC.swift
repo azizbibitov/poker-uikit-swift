@@ -28,10 +28,7 @@ class QuizVC: UIViewController {
     
     func setupCallbacks() {
         mainView.readyTestView.controlsView.yesBtnCallback = { [weak self] in
-            let vc = QuestionsVC()
-            let navVC = UINavigationController(rootViewController: vc)
-            navVC.modalPresentationStyle = .fullScreen
-            self?.tabBarController?.present(navVC, animated: true)
+            self?.tabBarController?.present(QuestionsView().viewController(presentationStyle: .fullScreen), animated: true)
         }
         
         mainView.readyTestView.controlsView.noBtnCallback = { [weak self] in
