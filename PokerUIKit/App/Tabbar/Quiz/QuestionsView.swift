@@ -8,98 +8,193 @@
 import SwiftUI
 import Combine
 
-struct GlassButton: View {
-    let title: String
-    let titleColor: Color
-    let backgroundColor: Color
-    let font: Font
-    let cornerRadius: CGFloat
-    let borderWidth: CGFloat
-    let borderColor: Color
-    let makeGlass: Bool
-    let width: CGFloat?
-    let height: CGFloat?
-    let action: () -> Void
-
-    init(
-        title: String,
-        titleColor: Color = .white,
-        backgroundColor: Color = .blue,
-        font: Font = .system(size: 18, weight: .semibold),
-        cornerRadius: CGFloat = 12,
-        borderWidth: CGFloat = 0,
-        borderColor: Color = .clear,
-        makeGlass: Bool = true,
-        width: CGFloat? = nil,
-        height: CGFloat? = 50,
-        action: @escaping () -> Void
-    ) {
-        self.title = title
-        self.titleColor = titleColor
-        self.backgroundColor = backgroundColor
-        self.font = font
-        self.cornerRadius = cornerRadius
-        self.borderWidth = borderWidth
-        self.borderColor = borderColor
-        self.makeGlass = makeGlass
-        self.width = width
-        self.height = height
-        self.action = action
-    }
-
+struct RadioButtonGroup: View {
+    @EnvironmentObject private var questionsVM: QuestionsVM
+ 
+    
     var body: some View {
-        let buttonContent = Text(title)
-            .font(font)
-            .foregroundColor(titleColor)
-            .frame(width: width, height: height)
-            .lineLimit(1)
-        
-        if #available(iOS 26.0, *), makeGlass {
-            Button(action: action) {
-                buttonContent
+        VStack(alignment: .leading, spacing: 24) {
+            ForEach(questionsVM.currentQuestion?.answers ?? [], id: \.self) { option in
+                RadioButtonRow(
+                    label: option.displayName,
+                    isSelected: questionsVM.selectedOption == option
+                ) {
+                    questionsVM.selectedOption = option
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .buttonStyle(.glassProminent)
-            .tint(backgroundColor)
-            
           
-        } else {
-            Button(action: action) {
-                buttonContent
+        }
+        .frame(width: 258)
+    }
+}
+
+struct RadioButtonRow: View {
+    let label: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                ZStack {
+                    Circle()
+                        .stroke(isSelected ? Color.main : Color.pokerBlack, lineWidth: 2)
+                        .frame(width: 20, height: 20)
+                    if isSelected {
+                        Circle()
+                            .fill(Color.main)
+                            .frame(width: 10, height: 10)
+                    }
+                }
+                Text(label)
+                    .font(.regular(20))
+                    .foregroundColor(Color(hex: "#1F1F1F"))
+                
+              
             }
         }
+        .buttonStyle(.plain)
+    }
+}
+
+struct ToastView: View {
+    @EnvironmentObject private var questionsVM: QuestionsVM
+    var data: Toast
+    
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(data.color).offset(x: 0, y: 4)
+                .frame(height: 50)
+            
+            HStack(spacing: 12) {
+                Image(data.icon)
+                    .resizable()
+                    .renderingMode(.template)
+                    .frame(width: 20, height: 20, alignment: .center)
+                    .foregroundColor(Color.bWhite)
+                    .padding(8)
+                    .background(data.color)
+                    .cornerRadius(30)
+                
+                VStack(spacing: 4) {
+                    Text(LocalizedStringKey(data.title))
+                        .font(.regular(20))
+                        .foregroundColor(.textSecondary)
+                        .lineLimit(1)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    Text(LocalizedStringKey(data.desc))
+                        .font(.regular(20))
+                        .foregroundColor(.textPrimary)
+                        .lineLimit(1)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                
+                Button {
+                    withAnimation {
+                        questionsVM.toast = nil
+                    }
+                } label: {
+                    Image("cross-small")
+                        .renderingMode(.template)
+                        .foregroundColor(.primaryDisabled)
+                        .frame(width: 24, height: 24, alignment: .center)
+                }
+            }.padding(.vertical, 8)
+                .padding(.horizontal, 16)
+                .background(Color.secondarySurface)
+                .cornerRadius(12)
+                .frame(maxWidth: .infinity)
+        }.frame(maxWidth: UIScreen.main.bounds.width)
+    }
+}
+
+struct QuestionCardView: View {
+    
+    @EnvironmentObject private var questionsVM: QuestionsVM
+    
+    var body: some View {
+        ZStack {
+            VStack(spacing: 40){
+                Text("What is the combination of that cards?")
+                    .frame(width: 258)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(Color.pokerBlack.opacity(0.7))
+                
+                Image(questionsVM.currentQuestion?.question.rawValue ?? "")
+                
+                RadioButtonGroup()
+            }
+        }
+        .frame(width: 310, height: 520)
+        .background(Color.color12)
+        .clipShape(
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+        )
+        .padding(.top)
     }
 }
 
 struct QuestionsView: View {
+    @StateObject private var viewModel = QuestionsVM()
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                VStack {
-                    GlassButton(
-                        title: "Start",
-                        titleColor: .white,
-                        backgroundColor: Color.main,
-                        font: .regular(18),
-                        cornerRadius: 16,
-                        borderWidth: 0,
-                        borderColor: .clear,
-                        makeGlass: true,
-                        width: 310,
-                        height: 50
-                    ) {
-                        print("Tapped!")
+            ZStack(alignment: .bottom) {
+                ScrollView{
+                    
+                    VStack(spacing: 62){
+                        
+                        QuestionCardView()
+                        
+                        GlassButton(
+                            title: viewModel.btnName,
+                            titleColor: .white,
+                            backgroundColor: Color.main,
+                            font: .regular(18),
+                            cornerRadius: 16,
+                            borderWidth: 0,
+                            borderColor: .clear,
+                            makeGlass: false,
+                            width: 310,
+                            height: 50
+                        ) {
+                            
+                            
+                            if viewModel.quizQuestions.count <= viewModel.currentQuestionIndex + 1 {
+                                viewModel.saveScore()
+                                dismiss()
+                                return
+                            }
+                            viewModel.nextQuestion()
+                        }
+                        .padding()
+                        
                     }
-                    .padding()
-
+                    
                 }
+                .scrollIndicators(.hidden)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    questionToolbarItems
+                }
+                
+                if let toast = viewModel.toast {
+                    ToastView(data: toast)
+                        .padding(16)
+                        .padding(.bottom, 50)
+                        .animation(.bouncy(duration: 0.2))
+                        .transition(.move(edge: .bottom))
+                }
+                
             }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                questionToolbarItems
-            }
+            
+            
         }
+        .environmentObject(viewModel)
     }
     
     @ToolbarContentBuilder
@@ -107,7 +202,7 @@ struct QuestionsView: View {
         // Leading item
         if #available(iOS 26.0, *) {
             ToolbarItem(placement: .navigationBarLeading) {
-                Text("Question 1/10")
+                Text("Question \(viewModel.currentQuestionIndex + 1)/\(viewModel.quizQuestions.count)")
                     .font(.regular(30))
                     .foregroundColor(.pokerBlack)
                     .fixedSize(horizontal: true, vertical: false)
@@ -115,7 +210,7 @@ struct QuestionsView: View {
             .sharedBackgroundVisibility(.hidden)
         } else {
             ToolbarItem(placement: .navigationBarLeading) {
-                Text("Question 1/10")
+                Text("Question \(viewModel.currentQuestionIndex + 1)/\(viewModel.quizQuestions.count)")
                     .font(.regular(30))
                     .foregroundColor(.pokerBlack)
                     .fixedSize(horizontal: true, vertical: false)
@@ -125,6 +220,7 @@ struct QuestionsView: View {
         // Trailing item
         ToolbarItem(placement: .navigationBarTrailing) {
             Button {
+                viewModel.saveScore()
                 dismiss()
             } label: {
                 Image("close")
@@ -141,9 +237,23 @@ struct QuestionsView: View {
 
 class QuestionsVM: ObservableObject {
     var quizQuestions: [QuizModel] = []
-    @Published var currentQuestionIndex = 1
+    @Published var currentQuestionIndex = 0
     @Published var currentQuestion: QuizModel?
-    var score: Int = 0
+    @Published var selectedOption: PokerCombination?
+    @Published var btnName: String = "Next"
+    @AppStorage("score") var score: Int = 0
+    var currentScore: Int = 0
+    
+    @Published var toast: Toast? {
+        didSet { removeToast() }
+    }
+    
+    func removeToast() {
+        if toast == nil { return }
+        DispatchQueue.main.asyncAfter(deadline: .now()+5){
+            self.toast = nil
+        }
+    }
     
     init() {
         quizQuestions = QuizFactory.makeQuizUnique()
@@ -151,13 +261,31 @@ class QuestionsVM: ObservableObject {
     }
     
     func nextQuestion() {
+        
+        if selectedOption == nil {
+            toast = .warning(title: "Warning", desc: "Select answer!")
+            return
+        }
+        
         checkAnswer()
         currentQuestionIndex += 1
-        currentQuestion = quizQuestions[currentQuestionIndex-1]
+        currentQuestion = quizQuestions[currentQuestionIndex]
+        selectedOption = nil
+        if quizQuestions.count == currentQuestionIndex + 1 {
+            btnName = "Finish"
+        }
+    }
+    
+    func saveScore(){
+        if currentScore > score {
+            score = currentScore
+        }
     }
     
     func checkAnswer() {
-        
+        if currentQuestion?.correctAnswer == selectedOption {
+            currentScore += 1
+        }
     }
     
 }

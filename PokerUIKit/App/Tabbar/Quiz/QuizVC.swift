@@ -26,6 +26,12 @@ class QuizVC: UIViewController {
         setupCallbacks()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        mainView.resultValueLabel.text = "\(Defaults.score)"
+    }
+    
     func setupCallbacks() {
         mainView.readyTestView.controlsView.yesBtnCallback = { [weak self] in
             self?.tabBarController?.present(QuestionsView().viewController(presentationStyle: .fullScreen), animated: true)
@@ -122,7 +128,6 @@ class QuizView: UIView {
         labelsHStack.addArrangedSubview(resultLabel)
         labelsHStack.addArrangedSubview(resultValueLabel)
         resultLabel.text = "Your best result:"
-        resultValueLabel.text = "9"
         
         vStack.addArrangedSubview(readyTestView)
         

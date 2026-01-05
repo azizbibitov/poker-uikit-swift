@@ -16,6 +16,17 @@ extension Color {
     static let green = Color(hex: "#1b9b28")
     static let cdGray = Color(hex: "#cdcdcd")
     static let skyBlue = Color(hex: "#4db4fe")
+    
+//    struct Semantic {
+//        static let warningOn = Color("WarningOn", bundle: .main)
+//        static let warningContainer = Color("WarningContainer", bundle: .main)
+//        static let errorOn = Color("ErrorOn", bundle: .main)
+//        static let errorContainer = Color("ErrorContainer", bundle: .main)
+//        static let successOn = Color("SuccessOn", bundle: .main)
+//        static let successContainer = Color("SuccessContainer", bundle: .main)
+//        static let bWhite = Color("BWhite", bundle: .main)
+//        static let textSecondary = Color("TextSecondary", bundle: .main)
+//    }
 }
 
 extension Color {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct OnboardingData {
     var image: String
@@ -50,7 +51,32 @@ enum PokerCombination: String, CaseIterable {
     case fourKind = "four_kind"
     case straightFlush = "straight_flush"
     case royalFlush = "royal_flush"
+    
+    // Computed property to get a human-readable name
+    var displayName: String {
+        switch self {
+        case .pair:
+            return "Pair"
+        case .twoPairs:
+            return "Two Pairs"
+        case .threeKind:
+            return "Three of a Kind"
+        case .straight:
+            return "Straight"
+        case .flush:
+            return "Flush"
+        case .fullHouse:
+            return "Full House"
+        case .fourKind:
+            return "Four of a Kind"
+        case .straightFlush:
+            return "Straight-Flush"
+        case .royalFlush:
+            return "Royal Flush"
+        }
+    }
 }
+
 
 struct QuizModel {
     let question: PokerCombination
@@ -58,4 +84,52 @@ struct QuizModel {
     let correctAnswer: PokerCombination
 }
 
-
+enum Toast {
+    case error(title: String, desc: String)
+    case warning(title: String, desc: String)
+    case success(title: String, desc: String)
+    
+    var color: Color {
+        switch self {
+        case .error:
+            return .errorOn
+        case .warning:
+            return .warningOn
+        case .success:
+            return .successOn
+        }
+    }
+    
+    var icon: String {
+        switch self {
+        case .error:
+            return "circle-x"
+        case .warning:
+            return "warning"
+        case .success:
+            return "circle-check"
+        }
+    }
+    
+    var title: String {
+        switch self {
+        case .error(let title, _):
+            return title
+        case .warning(let title, _):
+            return title
+        case .success(let title, _):
+            return title
+        }
+    }
+    
+    var desc: String {
+        switch self {
+        case .error(_, let desc):
+            return desc
+        case .warning(_, let desc):
+            return desc
+        case .success(_, let desc):
+            return desc
+        }
+    }
+}
